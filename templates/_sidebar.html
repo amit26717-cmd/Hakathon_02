@@ -1,0 +1,27 @@
+{# Shared sidebar: notifications + profile. Included by every dashboard. #}
+<div class="card shadow-sm mb-4">
+  <div class="card-header fw-bold">🔔 Notifications</div>
+  <ul class="list-group list-group-flush">
+    {% for n in notifications %}
+      <li class="list-group-item small">
+        {{ n.message }}
+        <div class="text-muted">{{ n.created_at.strftime('%d %b, %H:%M') }}</div>
+      </li>
+    {% else %}
+      <li class="list-group-item text-muted small">No notifications.</li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% if role != 'admin' %}
+<div class="card shadow-sm">
+  <div class="card-header fw-bold">My Profile</div>
+  <div class="card-body small">
+    <div><strong>Email:</strong> {{ user.email }}</div>
+    <div><strong>Phone:</strong> {{ user.phone or '-' }}</div>
+    <div><strong>Address:</strong> {{ user.address or '-' }}</div>
+    <div><strong>Emergency contact:</strong> {{ user.emergency_contact or '-' }}</div>
+    <div><strong>Health info:</strong> {{ user.health_info or '-' }}</div>
+  </div>
+</div>
+{% endif %}

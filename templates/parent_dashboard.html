@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block title %}Parent Dashboard – Sahyog Setu{% endblock %}
+{% block content %}
+<h3 class="mb-3">Welcome, {{ user.name }}
+  <span class="badge bg-secondary">Parent</span>
+  {% if user.verified %}<span class="badge bg-success">Verified</span>
+  {% else %}<span class="badge bg-warning text-dark">Pending verification</span>{% endif %}
+</h3>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-header fw-bold">My Children</div>
+      <div class="card-body">
+        {% if children %}
+          <ul class="list-group mb-3">
+            {% for c in children %}
+              <li class="list-group-item">
+                <strong>{{ c.name }}</strong>{% if c.age %} ({{ c.age }} yrs){% endif %}
+                {% if c.health_info %}<div class="small text-muted">Health: {{ c.health_info }}</div>{% endif %}
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted">No children added yet.</p>
+        {% endif %}
+        <form method="post" action="{{ url_for('add_child') }}" class="row g-2">
+          <div class="col-md-4"><input name="name" class="form-control" placeholder="Child name" required></div>
+          <div class="col-md-2"><input name="age" type="number" min="0" max="18" class="form-control" placeholder="Age"></div>
+          <div class="col-md-4"><input name="health_info" class="form-control" placeholder="Allergies / medication"></div>
+          <div class="col-md-2"><button class="btn btn-success w-100">Add</button></div>
+        </form>
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-header fw-bold">Available Activities</div>
+      <div class="card-body">
+        {% for a in activities %}
+          <div class="border rounded p-3 mb-2">
+            <strong>{{ a.title }}</strong>
+            <span class="badge bg-info text-dark">{{ a.category or 'other' }}</span>
+            <div class="small text-muted">{{ a.date }} at {{ a.time }} · with {{ a.elder.name }}
+              · {{ a.bookings|length }}/{{ a.capacity }} booked</div>
+            {% if a.description %}<div class="small">{{ a.description }}</div>{% endif %}
+            {% if children %}
+              <form method="post" action="{{ url_for('book_activity', activity_id=a.id) }}" class="d-flex gap-2 mt-2">
+                <select name="child_id" class="form-select form-select-sm w-auto">
+                  {% for c in children %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                </select>
+                <button class="btn btn-sm btn-success">Book</button>
+              </form>
+            {% endif %}
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">No activities available yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">My Bookings</div>
+      <div class="card-body">
+        {% for b in bookings %}
+          <div class="d-flex justify-content-between border-bottom py-2">
+            <span>{{ b.child.name }} → {{ b.activity.title }} ({{ b.activity.date }} {{ b.activity.time }})</span>
+            <span>
+              {% if b.checked_out_at %}<span class="badge bg-secondary">Checked out</span>
+              {% elif b.checked_in_at %}<span class="badge bg-success">Checked in</span>
+              {% else %}<span class="badge bg-warning text-dark">Upcoming</span>{% endif %}
+            </span>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">No bookings yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">{% include "_sidebar.html" %}</div>
+</div>
+{% endblock %}

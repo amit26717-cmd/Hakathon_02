@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Sahyog Setu – Home{% endblock %}
+{% block content %}
+<div class="p-5 mb-4 bg-white rounded-3 shadow-sm text-center">
+  <h1 class="display-5 fw-bold text-success">Sahyog Setu</h1>
+  <p class="lead">Bridging Generations, Building Care</p>
+  <p class="text-muted mx-auto" style="max-width: 640px;">
+    Working parents need reliable childcare. Elders in the community want purpose and company.
+    Sahyog Setu connects them, so children stay active and safe, and elders stay engaged.
+  </p>
+  {% if not session.get('user_id') %}
+    <a class="btn btn-success btn-lg me-2" href="{{ url_for('register') }}">Get Started</a>
+    <a class="btn btn-outline-success btn-lg" href="{{ url_for('login') }}">Login</a>
+  {% else %}
+    <a class="btn btn-success btn-lg" href="{{ url_for('dashboard') }}">Go to Dashboard</a>
+  {% endif %}
+</div>
+
+<div class="row g-4 text-center">
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm"><div class="card-body">
+      <div class="fs-1">🧒</div>
+      <h5 class="card-title">Children</h5>
+      <p class="card-text text-muted">A safe, screen-free, engaging environment.</p>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm"><div class="card-body">
+      <div class="fs-1">👴</div>
+      <h5 class="card-title">Elders</h5>
+      <p class="card-text text-muted">Meaningful involvement and better well-being.</p>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100 shadow-sm"><div class="card-body">
+      <div class="fs-1">👨‍👩‍👧</div>
+      <h5 class="card-title">Families</h5>
+      <p class="card-text text-muted">A dependable support system in the community.</p>
+    </div></div>
+  </div>
+</div>
+{% endblock %}

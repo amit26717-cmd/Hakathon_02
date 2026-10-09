@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard – Sahyog Setu{% endblock %}
+{% block content %}
+<h3 class="mb-3">Admin Dashboard <span class="badge bg-dark">Supervisor</span></h3>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+
+    <div class="row g-3 mb-4 text-center">
+      <div class="col-6 col-md-3"><div class="card shadow-sm"><div class="card-body">
+        <div class="fs-3">{{ stats.parents }}</div><div class="small text-muted">Parents</div></div></div></div>
+      <div class="col-6 col-md-3"><div class="card shadow-sm"><div class="card-body">
+        <div class="fs-3">{{ stats.elders }}</div><div class="small text-muted">Elders</div></div></div></div>
+      <div class="col-6 col-md-3"><div class="card shadow-sm"><div class="card-body">
+        <div class="fs-3">{{ stats.activities }}</div><div class="small text-muted">Activities</div></div></div></div>
+      <div class="col-6 col-md-3"><div class="card shadow-sm"><div class="card-body">
+        <div class="fs-3">{{ stats.bookings }}</div><div class="small text-muted">Bookings</div></div></div></div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-header fw-bold">Pending Verification</div>
+      <div class="card-body">
+        {% for p in pending %}
+          <div class="d-flex justify-content-between align-items-center border-bottom py-2">
+            <div>
+              <strong>{{ p.name }}</strong> <span class="badge bg-secondary text-capitalize">{{ p.role }}</span>
+              <div class="small text-muted">{{ p.email }}{% if p.phone %} · {{ p.phone }}{% endif %}{% if p.address %} · {{ p.address }}{% endif %}</div>
+            </div>
+            <form method="post" action="{{ url_for('verify_user', user_id=p.id) }}">
+              <button class="btn btn-sm btn-success">Verify</button></form>
+          </div>
+        {% else %}
+          <p class="text-muted mb-0">Nobody is waiting for verification.</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+      <div class="card-header fw-bold">All Users</div>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead><tr><th>Name</th><th>Role</th><th>Email</th><th>Emergency contact</th><th>Health info</th><th>Status</th></tr></thead>
+          <tbody>
+            {% for u in users %}
+              <tr>
+                <td>{{ u.name }}</td>
+                <td class="text-capitalize">{{ u.role }}</td>
+                <td>{{ u.email }}</td>
+                <td>{{ u.emergency_contact or '-' }}</td>
+                <td>{{ u.health_info or '-' }}</td>
+                <td>{% if u.verified %}<span class="badge bg-success">Verified</span>{% else %}<span class="badge bg-warning text-dark">Pending</span>{% endif %}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-header fw-bold">Recent Bookings and Attendance</div>
+      <div class="table-responsive">
+        <table class="table table-sm mb-0">
+          <thead><tr><th>Child</th><th>Activity</th><th>Elder</th><th>In</th><th>Out</th></tr></thead>
+          <tbody>
+            {% for b in all_bookings %}
+              <tr>
+                <td>{{ b.child.name }}</td>
+                <td>{{ b.activity.title }}</td>
+                <td>{{ b.activity.elder.name }}</td>
+                <td>{{ b.checked_in_at.strftime('%H:%M') if b.checked_in_at else '-' }}</td>
+                <td>{{ b.checked_out_at.strftime('%H:%M') if b.checked_out_at else '-' }}</td>
+              </tr>
+            {% else %}
+              <tr><td colspan="5" class="text-muted">No bookings yet.</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">{% include "_sidebar.html" %}</div>
+</div>
+{% endblock %}
