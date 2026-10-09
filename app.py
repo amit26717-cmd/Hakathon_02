@@ -321,6 +321,9 @@ def init_db():
             db.session.commit()
 
 
+
+init_db()
+
+
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True)
