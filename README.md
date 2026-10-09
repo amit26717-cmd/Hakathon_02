@@ -68,8 +68,9 @@ _Add screenshots of your app here._
 ## Future Improvements
 
 - Notifications for new requests
-- Location-based matching of volunteers
-- Admin dashboard
+- Profile edit option for users and Admin
+- Admin dashboard : 
+- Elder dashboard : Activity Schedule time improvement 
 
 ## Contributing
 
