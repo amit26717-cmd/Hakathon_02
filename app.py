@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY", "sahyog_secret_change_me")
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sahyog.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:////tmp/sahyog.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 
